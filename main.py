@@ -42,13 +42,18 @@ def get_flash_drive_mount_point():
 
 
 def copy_to_flash_drive(zip_data, flash_drive_path, zip_filename):
-    if os.path.exists(flash_drive_path) and os.path.isdir(flash_drive_path):
-        with open(os.path.join(flash_drive_path, zip_filename), "wb") as zip_file:
-            zip_file.write(zip_data)
+    loot_folder_path = os.path.join(flash_drive_path, "Loot")
 
-        print(f"Successfully copied zip file to {flash_drive_path}")
-    else:
-        print("Flash drive not found or invalid path.")
+    if not os.path.exists(loot_folder_path):
+        os.makedirs(loot_folder_path)
+
+    zip_file_path = os.path.join(loot_folder_path, zip_filename)
+
+    with open(zip_file_path, "wb") as zip_file:
+        zip_file.write(zip_data)
+
+    print(f"Successfully copied zip file to {loot_folder_path}")
+
 
 
 def device_insertion_handler(action, device):
