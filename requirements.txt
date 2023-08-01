@@ -1,4 +1,5 @@
 opencv_python==4.8.0.74
+Pillow==10.0.0
 pynput==1.7.6
 pywin32==306
 pywinusb==0.4.2
